@@ -4,45 +4,46 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>AI 视频工作台</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b1020;color:#fff;min-height:100vh}main{max-width:760px;margin:auto;padding:22px 16px 40px}.hero{padding:10px 0 18px}h1{font-size:30px;margin:0 0 8px}p{color:#aeb8d0}.card{background:#141b31;border:1px solid #26304d;border-radius:20px;padding:18px;margin-top:14px;box-shadow:0 10px 30px #0003}label{display:block;font-weight:700;margin:12px 0 8px}textarea,input,select{width:100%;border:1px solid #303b5d;background:#0e1528;color:#fff;border-radius:13px;padding:13px;font-size:16px;outline:none}textarea{min-height:120px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid #35415f;border-radius:999px;padding:8px 12px;background:#10182c;color:#dce3f5;cursor:pointer}.chip.active{border-color:#8ea7ff;background:#26345e}.primary{width:100%;margin-top:18px;padding:15px;border:0;border-radius:14px;background:#fff;color:#101426;font-size:17px;font-weight:800}.primary:disabled{opacity:.55}.muted{font-size:13px;color:#8994ad;line-height:1.6}.status{margin-top:12px;padding:12px;border-radius:12px;background:#0e1528;color:#aeb8d0;line-height:1.55}.video{width:100%;border-radius:14px;background:#05070d;margin-top:14px;display:none}.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#202b4a;color:#b9c8ff;font-size:12px}.small{font-size:12px}.danger{color:#ffbdc4}.success{color:#b8f2cb}.link{color:#b9c8ff}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b1020;color:#fff;min-height:100vh}main{max-width:760px;margin:auto;padding:22px 16px 40px}.hero{padding:10px 0 18px}h1{font-size:30px;margin:0 0 8px}p{color:#aeb8d0}.card{background:#141b31;border:1px solid #26304d;border-radius:20px;padding:18px;margin-top:14px;box-shadow:0 10px 30px #0003}label{display:block;font-weight:700;margin:12px 0 8px}textarea,input,select{width:100%;border:1px solid #303b5d;background:#0e1528;color:#fff;border-radius:13px;padding:13px;font-size:16px;outline:none}textarea{min-height:120px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid #35415f;border-radius:999px;padding:8px 12px;background:#10182c;color:#dce3f5;cursor:pointer}.chip.active{border-color:#8ea7ff;background:#26345e}.primary{width:100%;margin-top:18px;padding:15px;border:0;border-radius:14px;background:#fff;color:#101426;font-size:17px;font-weight:800}.primary:disabled{opacity:.55}.muted{font-size:13px;color:#8994ad;line-height:1.6}.status{margin-top:12px;padding:12px;border-radius:12px;background:#0e1528;color:#aeb8d0;line-height:1.55}.video{width:100%;border-radius:14px;background:#05070d;margin-top:14px;display:none}.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#202b4a;color:#b9c8ff;font-size:12px}.small{font-size:12px}.danger{color:#ffbdc4}.success{color:#b8f2cb}.link{color:#b9c8ff}.estimate{margin-top:10px;padding:10px 12px;border-radius:12px;background:#10182c;color:#c8d2ea;font-size:13px;line-height:1.5}
 </style></head>
 <body><main>
-<section class="hero"><span class="badge">手机优先 · 免费额度优先</span><h1>🎬 AI 视频工作台</h1><p>第一版真正接入 Hugging Face Inference Providers。优先使用你账号自带的免费额度，不在页面里设置付款。</p></section>
+<section class="hero"><span class="badge">手机优先 · 零元优先 · 不自动购买</span><h1>🎬 AI 视频工作台</h1><p>第一版已真正接入 Hugging Face Inference Providers。先使用你账号已有的免费额度；额度不足时直接停止，不替你购买额度。</p></section>
 <section class="card">
 <label for="token">Hugging Face Access Token</label>
 <input id="token" type="password" autocomplete="off" placeholder="hf_••••••••（只保存在本机浏览器）">
-<p class="muted">需要你自己的免费 Hugging Face Token。它不会写进 GitHub；只保存在你手机的浏览器 LocalStorage。官方也提醒前端 Token 有泄露风险，所以这个版本适合你自己使用，不适合公开给别人。</p>
+<p class="muted">把你刚创建的 Token 粘贴到这里。它不会写进 GitHub，只保存在你手机浏览器的 LocalStorage。⚠️ 这是个人使用方案，不要把这个网页和 Token 公开给别人。</p>
 <label for="prompt">你想生成什么视频？</label><textarea id="prompt" placeholder="例如：一只鹈鹕骑着自行车穿过东京街头，电影感，镜头跟随，夕阳光线"></textarea>
 <label>视频时长</label><div class="chips" id="dur"><button class="chip active" data-v="5">5 秒（推荐）</button><button class="chip" data-v="10">10 秒</button><button class="chip" data-v="15">15 秒</button></div>
-<div class="row"><div><label>画幅</label><select id="ratio"><option value="9:16">9:16 竖屏</option><option value="16:9">16:9 横屏</option><option value="1:1">1:1 方形</option></select></div><div><label>模型</label><select id="model"><option value="Wan-AI/Wan2.2-TI2V-5B">Wan 2.2（免费优先尝试）</option><option value="Lightricks/LTX-Video">LTX-Video</option></select></div></div>
-<button class="primary" id="go">✨ 免费额度生成</button><div class="status" id="status">准备好了。第一次建议选 5 秒；视频模型和免费额度会随平台变化。</div><video id="preview" class="video" controls playsinline></video><a id="download" class="link" style="display:none" download="ai-video.mp4">⬇️ 保存视频</a>
+<div class="row"><div><label>画幅</label><select id="ratio"><option value="9:16">9:16 竖屏</option><option value="16:9">16:9 横屏</option><option value="1:1">1:1 方形</option></select></div><div><label>模型</label><select id="model"><option value="Wan-AI/Wan2.2-TI2V-5B">Wan 2.2（优先尝试）</option><option value="Lightricks/LTX-Video-0.9.8-13B-distilled">LTX-Video 0.9.8（轻量版）</option></select></div></div>
+<div class="estimate" id="estimate">💰 当前模式：优先使用 Hugging Face 账号免费额度。5 秒为首次测试推荐；实际是否支持指定时长/画幅由模型和提供商决定。</div>
+<button class="primary" id="go">✨ 免费额度生成</button><div class="status" id="status">准备好了。先把 Token 粘贴进来，再输入视频描述。</div><video id="preview" class="video" controls playsinline></video><a id="download" class="link" style="display:none" download="ai-video.mp4">⬇️ 保存视频</a>
 </section>
-<section class="card"><b>💰 零元优先策略</b><p class="muted">Hugging Face 官方目前给免费用户每月 $0.10 的 Inference Providers 试用额度；额度不足后需要主动购买额度才能继续计费。我们这里不保存付款信息，也不自动购买。cite_placeholder</p><p class="muted small">注意：5/10/15 秒是工作台选项，但具体模型是否接受该时长、分辨率和提供商规则由模型决定。生成失败时不会伪装成成功。</p></section>
+<section class="card"><b>🛡️ 零元安全规则</b><p class="muted">本网页不保存付款信息、不购买额度，也没有自动充值逻辑。若当前模型/提供商要求付费或免费额度不足，会直接显示失败原因。</p><p class="muted small">提示：5/10/15 秒目前是工作台选项。部分模型只接受固定时长，因此页面会把时长作为生成要求传给模型；模型不支持时可能失败。后续可以继续增加更多模型和图片转视频。</p></section>
 </main>
 <script type="module">
 import { InferenceClient } from 'https://esm.sh/@huggingface/inference';
-const tokenEl=document.getElementById('token'),promptEl=document.getElementById('prompt'),statusEl=document.getElementById('status'),go=document.getElementById('go'),video=document.getElementById('preview'),download=document.getElementById('download');
+const tokenEl=document.getElementById('token'),promptEl=document.getElementById('prompt'),statusEl=document.getElementById('status'),go=document.getElementById('go'),video=document.getElementById('preview'),download=document.getElementById('download'),estimateEl=document.getElementById('estimate');
 let duration='5';
 const saved=localStorage.getItem('hf_token'); if(saved) tokenEl.value=saved;
 tokenEl.addEventListener('change',()=>{if(tokenEl.value.trim())localStorage.setItem('hf_token',tokenEl.value.trim())});
-document.querySelectorAll('#dur .chip').forEach(b=>b.onclick=()=>{document.querySelectorAll('#dur .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');duration=b.dataset.v});
+document.querySelectorAll('#dur .chip').forEach(b=>b.onclick=()=>{document.querySelectorAll('#dur .chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');duration=b.dataset.v;estimateEl.textContent=`💰 当前模式：优先使用 Hugging Face 账号免费额度。已选择 ${duration} 秒；实际支持情况由模型和提供商决定。`});
 function setStatus(t,cls=''){statusEl.className='status '+cls;statusEl.textContent=t}
 go.onclick=async()=>{
  const token=tokenEl.value.trim(), prompt=promptEl.value.trim(), model=document.getElementById('model').value, ratio=document.getElementById('ratio').value;
- if(!token){setStatus('先填 Hugging Face Access Token。你不需要付费会员，注册免费账号即可创建 Token。');return}
+ if(!token){setStatus('先填 Hugging Face Access Token。创建 Token 本身不收费。');return}
  if(!prompt){setStatus('先写一句你想生成的视频内容吧。');return}
  localStorage.setItem('hf_token',token); go.disabled=true; video.style.display='none'; download.style.display='none';
  setStatus('正在提交到视频模型……第一次可能需要等待模型加载，请耐心一点。');
  try{
    const hf=new InferenceClient(token);
-   const finalPrompt=prompt+' Cinematic video, '+ratio+' aspect ratio, '+duration+' seconds.';
+   const finalPrompt=`${prompt}. Cinematic video, ${ratio} aspect ratio, approximately ${duration} seconds.`;
    const blob=await hf.textToVideo({model,inputs:finalPrompt,provider:'auto'});
    const url=URL.createObjectURL(blob); video.src=url; video.style.display='block'; download.href=url; download.style.display='inline-block'; download.style.marginTop='12px';
    setStatus('🎉 视频生成成功！你可以直接播放或保存到手机。','success');
  }catch(err){
    console.error(err); let msg=err?.message||String(err);
-   if(msg.includes('402')||msg.toLowerCase().includes('credit')) msg='免费额度可能已经用完，或当前提供商需要计费。这个页面不会替你购买额度。';
-   setStatus('生成失败：'+msg+'。你可以换模型、缩短到 5 秒，或稍后再试。','danger');
+   if(msg.includes('402')||msg.toLowerCase().includes('credit')) msg='免费额度可能不足，或当前提供商需要计费。这个页面不会替你购买额度。';
+   setStatus('生成失败：'+msg+'。可以先换成 5 秒或换另一个模型再试。','danger');
  }finally{go.disabled=false}
 };
 </script></body></html>
