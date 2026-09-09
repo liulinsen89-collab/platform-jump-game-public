@@ -24,6 +24,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare arena background
+        run: |
+          mkdir -p assets
+          if [ -f "file_000000006ba8820e9974678e10d03218.png" ]; then
+            mv "file_000000006ba8820e9974678e10d03218.png" assets/arena-bg.png
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
