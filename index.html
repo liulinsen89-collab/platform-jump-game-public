@@ -15,7 +15,7 @@
 <script>
 const c=document.getElementById('c'),ctx=c.getContext('2d'),hp1=document.getElementById('hp1'),hp2=document.getElementById('hp2'),timerEl=document.getElementById('timer'),announce=document.getElementById('announce'),statusEl=document.getElementById('status'),flash=document.getElementById('flash'),comboA=document.getElementById('comboA'),comboB=document.getElementById('comboB');
 let W=0,H=0,dpr=1,t=0,last=performance.now(),shake=0,ended=false,started=performance.now();
-const arenaBg=new Image();arenaBg.src='assets/arena-bg.png';
+const arenaBg=new Image();arenaBg.src='file_000000006ba8820e9974678e10d03218.png';
 function resize(){const r=c.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
 const sparks=[],rings=[],slashes=[],trails=[],petals=[],mist=[];
 for(let i=0;i<55;i++)petals.push({x:Math.random(),y:Math.random(),s:.5+Math.random()*1.8,vx:-.015+Math.random()*.03,vy:.018+Math.random()*.035,r:Math.random()*6,spin:-2+Math.random()*4,a:.35+Math.random()*.55});
