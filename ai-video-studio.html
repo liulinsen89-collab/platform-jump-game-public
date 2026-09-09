@@ -10,8 +10,8 @@
 <section class="hero"><span class="badge">手机优先 · 零元优先 · 不自动购买</span><h1>🎬 AI 视频工作台</h1><p>先独立验证 Hugging Face Token，再加载视频 SDK。检测结果会显示在按钮正下方，并设置超时，避免一直卡住。</p></section>
 <section class="card">
 <label for="token">Hugging Face Access Token</label>
-<input id="token" type="password" autocomplete="off" placeholder="hf_••••••••（只保存在本机浏览器）">
-<p class="muted">Token 只保存在你手机浏览器的 LocalStorage，不写入 GitHub。⚠️ 不要把 Token 发到聊天里。</p>
+<input id="token" type="text" inputmode="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="粘贴 hf_••••••••（只保存在本机浏览器）">
+<p class="muted">已改为普通文本输入，避免 Android 安全输入法拦截粘贴。Token 只保存在你手机浏览器的 LocalStorage，不写入 GitHub。⚠️ 不要把 Token 发到聊天里。</p>
 <button class="secondary" id="check">🔐 测试 Token 是否有效</button>
 <div class="check-result" id="checkResult">检测结果会显示在这里。</div>
 <label for="prompt">你想生成什么视频？</label><textarea id="prompt" placeholder="例如：一只鹈鹕骑着自行车穿过东京街头，电影感，镜头跟随，夕阳光线"></textarea>
