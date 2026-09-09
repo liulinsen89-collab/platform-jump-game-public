@@ -7,11 +7,11 @@
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0b1020;color:#fff;min-height:100vh}main{max-width:760px;margin:auto;padding:22px 16px 40px}.hero{padding:10px 0 18px}h1{font-size:30px;margin:0 0 8px}p{color:#aeb8d0}.card{background:#141b31;border:1px solid #26304d;border-radius:20px;padding:18px;margin-top:14px;box-shadow:0 10px 30px #0003}label{display:block;font-weight:700;margin:12px 0 8px}textarea,input,select{width:100%;border:1px solid #303b5d;background:#0e1528;color:#fff;border-radius:13px;padding:13px;font-size:16px;outline:none}textarea{min-height:120px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid #35415f;border-radius:999px;padding:8px 12px;background:#10182c;color:#dce3f5;cursor:pointer}.chip.active{border-color:#8ea7ff;background:#26345e}.primary{width:100%;margin-top:18px;padding:15px;border:0;border-radius:14px;background:#fff;color:#101426;font-size:17px;font-weight:800}.primary:disabled{opacity:.55}.secondary{width:100%;margin-top:10px;padding:12px;border:1px solid #35415f;border-radius:14px;background:#10182c;color:#dce3f5;font-size:15px;font-weight:700}.secondary:disabled{opacity:.6}.muted{font-size:13px;color:#8994ad;line-height:1.6}.status{margin-top:12px;padding:12px;border-radius:12px;background:#0e1528;color:#aeb8d0;line-height:1.55}.check-result{margin-top:10px;padding:14px;border-radius:12px;background:#0e1528;border:1px solid #303b5d;line-height:1.55;min-height:48px}.video{width:100%;border-radius:14px;background:#05070d;margin-top:14px;display:none}.badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#202b4a;color:#b9c8ff;font-size:12px}.small{font-size:12px}.danger{color:#ffbdc4}.success{color:#b8f2cb}.link{color:#b9c8ff}.estimate{margin-top:10px;padding:10px 12px;border-radius:12px;background:#10182c;color:#c8d2ea;font-size:13px;line-height:1.5}
 </style></head>
 <body><main>
-<section class="hero"><span class="badge">手机优先 · 零元优先 · 不自动购买</span><h1>🎬 AI 视频工作台</h1><p>先独立验证 Hugging Face Token，再加载视频 SDK。检测结果会显示在按钮正下方，并设置超时，避免一直卡住。</p></section>
+<section class="hero"><span class="badge">手机优先 · 零元优先 · 不自动购买</span><h1>🎬 AI 视频工作台</h1><p>先独立验证 Hugging Face Token，再加载视频 SDK。Token 会自动清理复制时混入的空格、换行和不可见 Unicode 字符。</p></section>
 <section class="card">
 <label for="token">Hugging Face Access Token</label>
 <input id="token" type="text" inputmode="text" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="粘贴 hf_••••••••（只保存在本机浏览器）">
-<p class="muted">已改为普通文本输入，避免 Android 安全输入法拦截粘贴。Token 只保存在你手机浏览器的 LocalStorage，不写入 GitHub。⚠️ 不要把 Token 发到聊天里。</p>
+<p class="muted">已使用普通文本输入，可直接粘贴。Token 只保存在你手机浏览器的 LocalStorage，不写入 GitHub。⚠️ 不要把 Token 发到聊天里。</p>
 <button class="secondary" id="check">🔐 测试 Token 是否有效</button>
 <div class="check-result" id="checkResult">检测结果会显示在这里。</div>
 <label for="prompt">你想生成什么视频？</label><textarea id="prompt" placeholder="例如：一只鹈鹕骑着自行车穿过东京街头，电影感，镜头跟随，夕阳光线"></textarea>
@@ -26,7 +26,12 @@
 const tokenEl=document.getElementById('token'),promptEl=document.getElementById('prompt'),statusEl=document.getElementById('status'),go=document.getElementById('go'),check=document.getElementById('check'),checkResult=document.getElementById('checkResult'),video=document.getElementById('preview'),download=document.getElementById('download'),estimateEl=document.getElementById('estimate');
 let duration='5';
 try{const saved=localStorage.getItem('hf_token');if(saved)tokenEl.value=saved}catch(e){}
-function cleanToken(){return tokenEl.value.trim().replace(/^['\"]|['\"]$/g,'').trim()}
+function cleanToken(){
+ let t=tokenEl.value.normalize('NFKC').trim();
+ t=t.replace(/[\u0000-\u001F\u007F\u00A0\u200B-\u200D\u2060\uFEFF\s]/g,'');
+ t=t.replace(/^['\"]|['\"]$/g,'');
+ return t;
+}
 function setStatus(t,cls=''){statusEl.className='status '+cls;statusEl.textContent=t}
 function setCheck(t,cls=''){checkResult.className='check-result '+cls;checkResult.textContent=t}
 tokenEl.addEventListener('input',()=>{try{localStorage.setItem('hf_token',cleanToken())}catch(e){}});
@@ -34,6 +39,7 @@ document.querySelectorAll('#dur .chip').forEach(b=>b.onclick=()=>{document.query
 async function validateToken(show=true){
  const token=cleanToken();
  if(!token){if(show){setCheck('❌ 没有检测到 Token，请先粘贴 hf_ 开头的 Token。','danger');setStatus('❌ 没有检测到 Token。','danger')}return false}
+ if(!/^hf_[A-Za-z0-9_-]+$/.test(token)){if(show){setCheck('❌ Token 格式异常：里面含有非 Hugging Face Token 字符。页面已经自动清理空格/换行，但请确认复制的是完整的 hf_ Token。','danger');setStatus('❌ Token 格式异常，没有发起网络请求。','danger')}return false}
  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),10000);
  try{
   if(show){setCheck('⏳ 正在检测：正在连接 Hugging Face……');setStatus('⏳ 正在检测 Token，最多等待 10 秒……')}
